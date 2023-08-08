@@ -18,3 +18,8 @@ body {
 h1 {
   margin-bottom: 24px;
 }
+
+#block {
+  width: 300px;
+  background-color: red;
+}
