@@ -2,73 +2,104 @@
 
 // const user = {
 //   name: "John",
+//   age: 42,
 // };
-// localStorage.setItem("user", JSON.stringify(user));
-// const userFromStorage = localStorage.getItem("user");
 
-// localStorage.removeItem("user");
-// localStorage.clear();
+// localStorage.setItem("user", user);
+// console.log(localStorage.getItem("user"));
 
-// console.log(JSON.parse(userFromStorage));
+// const roles = ["admin", "user"];
+// localStorage.setItem("roles", roles);
+// console.log(localStorage.getItem("roles"));
 
-// console.log(document.body.children[0].firstElementChild);
-// console.log(document.body.childNodes);
+// const section = document.querySelector(".section");
+// console.log(section);
 
-// const title = document.querySelector(".second-title");
-// const title2 = document.querySelector("#main-title");
-// console.log(document.getElementById("main-title"));
+// const section2 = document.querySelectorAll("#section");
+// console.log(section2);
+
+// const title = document.querySelector(".title");
+// console.log(title.closest(".title"));
+
+// const title2 = document.getElementById("#title");
 // console.log(title2);
+// console.log(title.nextElementSibling);
+
+// ==============
+
+// const title = document.querySelector("#main-title");
+// console.log(title.hasAttribute("class"));
+// console.log(title.getAttribute("id"));
+
+// const section = document.querySelector(".section-one");
+// section.setAttribute("id", "section");
+
+// title.removeAttribute("class");
+// console.log([...title.attributes]);
+
+// const itemList = document.querySelectorAll(".item");
+// itemList.forEach((element) => console.log(element.dataset));
+// const itemList = document.querySelector("[data-sku='101']");
+// const itemList2 = document.querySelectorAll("[data-sku]");
+// console.log(itemList);
+
+// ==============
+
+// const title = document.querySelector("#main-title");
+// console.log(document.nodeType);
+
+// console.log(title.firstChild.nodeName);
+// title.textContent = "Some Title";
 // console.log(title);
 
-// const list = document.querySelector(".list");
-// const title = document.querySelector("#main-title");
+// const button = document.querySelector(".button");
+// console.log(button);
+
+// button.addEventListener("click", (event) => {
+//   event.stopPropagation();
+
+//   console.log("click on button");
+// });
+
 // const section = document.querySelector(".section-one");
+// console.log(section);
 
-// console.log();
-// console.log(list.closest("body"));
-// console.log(section.contains(list));
+// section.addEventListener("click", () => {
+//   console.log("click on section");
+// });
 
-// const li = document.createElement("li");
-// const div = document.createElement("div");
-// li.innerHTML = "Item #4";
-// div.innerHTML = "I'm div";
-// list.prepend(li);
-// list.after(div);
-// console.log(li);
+const card = document.querySelector(".card");
+const button = document.querySelector(".add-to-cart");
+// console.log(card);
 
-// section.insertAdjacentHTML(
-//   "afterbegin",
-//   `
-//   <ul class="list2">
-//     <li class="item">Item #1</li>
-//     <li class="item">Item #2</li>
-//     <li class="item">Item #3</li>
-//   </ul>
-// `
+// card.addEventListener(
+//   "click",
+//   (event) => {
+//     //   event.preventDefault();
+//     //   event.stopPropagation();
+
+//     console.log("make some redirect");
+//   },
+//   true
 // );
 
-// section.remove();
+const input = document.querySelector("input");
 
-// const secondTitle = document.querySelector(".second-title");
-// console.log(secondTitle.clientWidth);
-// secondTitle.className = "third-title";
-// secondTitle.classList.add("third-title");
-// secondTitle.classList.contains("third-title");
-// secondTitle.classList.remove("third-title");
-// secondTitle.style.color = "red";
+button.addEventListener(
+  "click",
+  (event) => {
+    event.preventDefault();
+    //   event.stopPropagation();
+    //
+    console.log(event);
+  },
+  true
+);
 
-// const block = document.querySelector("block");
-// console.log(block.clientWidth);
-// block.style.height = `${block.clientWidth}px`;
+input.addEventListener("focus", (event) => {
+  console.log(event);
+});
 
-// const listItems = document.querySelectorAll(".item");
-// console.log([...listItems]);
-
-// const listItems = document.querySelectorAll(".item");
-// listItems.forEach((liItem) => {
-//   console.log(liItem);
-// });
-// const title = section.querySelector(".title");
-
-console.log(document.getElementsByClassName("item"));
-console.log(document.querySelector(".item"));
+input.addEventListener("blur", (event) => {
+  console.log(event);
+});

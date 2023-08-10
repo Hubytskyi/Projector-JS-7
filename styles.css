@@ -19,7 +19,16 @@ h1 {
   margin-bottom: 24px;
 }
 
-#block {
-  width: 300px;
-  background-color: red;
+button {
+  padding: 10px;
+  font-size: 22px;
+}
+
+.card {
+  border: 2px solid #cdcdcd;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #fff;
 }
