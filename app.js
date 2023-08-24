@@ -1,151 +1,225 @@
 "use strict";
 
-// оголошуємо змінні
-const input = document.querySelector('.input');
-const operators = document.querySelectorAll('.operator');
-const numbers = document.querySelectorAll('.number');
-const clear = document.querySelector('.clear');
-const result = document.querySelector('.result');
+const human = {
+  name: "Ihor",
+  type: "human",
+  sayPhrase() {
+    console.log("I can cook");
+  },
+  cook() {
+    console.log("Bon appetit!");
+  },
+};
 
-const operatorsList = ["+", "-", "×", "÷", '.'];
+const dog = {
+  name: "Loki",
+  type: "dog",
+  sayPhrase() {
+    console.log("I like to eat");
+  },
+  eat() {
+    console.log("Sooo delicious!");
+  },
+};
 
-let isResultDisplyed = false;
+// function (arg1, arg2) {}
 
-// додаємо обробники подій для всіх кнопок з математичними операторами
-operators.forEach((operator) => {
-  operator.addEventListener('click', (event) => {
-    // отримуємо доступ до значення всередині інпута
-    const valueInput = input.innerHTML;
-    // отримуємо доступ до останнього елемента інпута (останній елемент строки)
-    const lastChar = valueInput[valueInput.length - 1];
+class Human {
+  constructor(name, phrase) {
+    this.name = name;
+    this.phrase = phrase;
+    this.type = "human";
+  }
 
-    // якщо строка пуста, оператор не додаємо, код зупиняється
-    if (valueInput.length === 0) {
-      return null;
+  sayPhrase() {
+    console.log(this.phrase);
+  }
 
-    // якщо в останній елемент в інпуті це оператор, то перезаписуємо його
-    } else if (operatorsList.includes(lastChar)) {
-      const newString = valueInput.substring(0, valueInput.length - 1) + event.target.innerHTML;
-      input.innerHTML = newString
+  cook() {
+    console.log(`My name is ${this.name} and I like to cook.`);
+  }
+}
 
-    // в іншому випадку додаємо до строки
+const humanClass = new Human("Ihor", "I can cook");
+
+// humanClass.sayPhrase();
+// humanClass.cook();
+
+class Dog2 {
+  constructor(name) {
+    this.name = name;
+    this.type = "dog";
+  }
+
+  sayPhrase() {
+    console.log("I like to eat");
+  }
+
+  eat() {
+    console.log(`My name is ${this.name} and i like to eat`);
+  }
+}
+
+// const loki = new Dog("Loki");
+// loki.eat();
+
+// console.log(typeof Dog);
+
+// Успадкування
+
+class Animal {
+  constructor(isMeatEating) {
+    this.isMeatEating = isMeatEating;
+  }
+
+  eatMeat() {
+    if (this.isMeatEating) {
+      console.log("I like to eat meat.");
     } else {
-      input.innerHTML += event.target.innerHTML;
+      console.log("I don't like eat meat");
     }
-  })
-});
+  }
+}
 
-// додамо обробники подій для всіх кнопок з цифрами
-numbers.forEach((number) => {
-  number.addEventListener(('click'), (event) => {
+class Pets extends Animal {
+  constructor(profile, isMeatEating) {
+    super(isMeatEating);
 
-    // отримуємо доступ до значення всередині інпута
-    const valueInput = input.innerHTML;
-    // отримуємо доступ до останнього елемента інпута (останній елемент строки)
-    const lastChar = valueInput[valueInput.length - 1];
+    this.profile = profile;
+  }
 
-    // якщо юзер просто вводить число - то ми його додаємо до введеної операції
-    if (!isResultDisplyed) {
-      input.innerHTML += event.target.innerHTML;
+  playWithToys() {
+    console.log("I like to play with toys.");
+  }
+}
 
-    // якщо юзер вводить число коли вже висвічується результат попередньої операції і оператор є останнім символом інпута
-		// введене число додаємо до інпута
-    } else if (isResultDisplyed && operatorsList.includes(lastChar)) {
-      input.innerHTML += event.target.innerHTML;
-      // ставимо позначку що це вже не результат попередньої введеної операції
-      isResultDisplyed = false;
+class Dog extends Pets {
+  constructor(name, isMeatEating) {
+    super(isMeatEating);
 
-    // якщо юзер вводить число коли відображається результат попередньої операції
-    // ми перезаписуємо весь інпут новим числом
+    this.name = name;
+  }
+
+  eat() {
+    console.log("I like to eat");
+  }
+}
+
+const luna = new Dog("Luna", false);
+const lucky = new Dog("Lucky", false);
+// console.log(luna);
+// console.log(lucky);
+
+// luna.eatMeat();
+
+// Інкапсуляція
+
+class CoffeeMachine {
+  #counter;
+
+  constructor(name) {
+    this.#counter = 0;
+    this.name = name;
+  }
+
+  makeCoffee(type) {
+    if (this.#counter > 5) {
+      console.log("Потібно почистити кавомашину");
+      return;
+    }
+
+    if (type === "cupp") {
+      this.#warnMilk();
+    }
+
+    console.log("Ваша кава успішно приговлена.");
+
+    this.#counter = this.#counter + 1;
+  }
+
+  #warnMilk() {
+    console.log("Молоко успішно підігріто");
+  }
+
+  clear() {
+    this.#counter = 0;
+    console.log("Чисто!");
+  }
+}
+
+const franke = new CoffeeMachine("franke");
+
+// console.log(franke);
+// franke.makeCoffee();
+// franke.makeCoffee();
+// franke.makeCoffee();
+// franke.makeCoffee();
+// franke.makeCoffee();
+// franke.makeCoffee("cupp");
+// franke.makeCoffee("cupp");
+// franke.clear();
+// franke.makeCoffee("cupp");
+
+class Animal2 {
+  constructor(name) {
+    this.name = name;
+  }
+
+  move() {
+    if (this.name === "rabbit") {
+      console.log("I can jump!");
     } else {
-      input.innerHTML = event.target.innerHTML;
-      // ставимо позначку що це вже не результат попередньої введеної операції
-      isResultDisplyed = false;
+      console.log("I can run");
     }
-  })
-});
+  }
+}
 
-clear.addEventListener('click', () => {
-  // очищуємо значення в рядку
-  input.innerHTML = '';
-  // ставимо позначку що це вже не результат попередньої введеної операції
-  isResultDisplyed = false;
-});
+class Rabbit extends Animal2 {
+  constructor(name) {
+    super(name);
+  }
+}
 
-result.addEventListener('click', () => {
-  // отримуємо доступ до значення всередині інпута
-  const valueInput = input.innerHTML;
-   // отримуємо доступ до останнього елемента інпута (останній елемент строки)
-  const lastChar = valueInput[valueInput.length - 1];
-
-  // якщо юзер останнім символом ввів оператор і натискає на отримання результату
-  if (operatorsList.includes(lastChar)) {
-    return null;
+class Cat extends Animal2 {
+  constructor(name) {
+    super(name);
+    this.name = name;
   }
 
-  // отримуємо масив всіх введених чисел      
-  const onlyNumbers = valueInput.split(/\+|\-|\×|\÷/g);
-  // отримуємо масив всіх введених операторів (їх завжди менше на один ніж введених чисел)
-  const onlyOperators = valueInput.replace(/[0-9]|\./g, '').split('');
+  move() {
+    console.log("Я переписав метод!");
+  }
+}
 
-  // ділення
-    // приклад:
-    // 1+4*5-6-8/2 
-    // [1,4,5,6,8,2] - onlyNumbers
-    // [+,*,-,-,/] - onlyOperators
-    // dividerIndex = 4
-    // const nums = [1,4,5,6,8,2] - onlyNumbers;
-    // nums.splice(4, 2, 8 / 2) - де 4 - це dividerIndex, 2 - кількість елементів які потрібно замінити включно з dividerIndex, 8 / 2 - результат того, на що міняємо
+const rabbit = new Rabbit("rabbit");
+const cat = new Cat("cat");
 
-  // знаходимо перший оператор множення серед всіх операторів
-  let dividerIndex = onlyOperators.indexOf('÷');
-   // доки оператор ділення є у масиві операторів (onlyOperators)
-  while(dividerIndex !== -1) {
-    // знаходимо у масиві значення чисел які знаходяться на цьому ж індексі що й оператор і наступне число і ділимо їх
-    const result = onlyNumbers[dividerIndex] / onlyNumbers[dividerIndex + 1];
-    // і замінюємо їх на результат
-    onlyNumbers.splice(dividerIndex, 2, result);
-    // видаляємо цей оператор ділення з масиву операторів
-    onlyOperators.splice(dividerIndex, 1);
-    // знаходимо наступний оператор ділення серед всіх операторів
-    dividerIndex = onlyOperators.indexOf('÷');
+rabbit.move();
+cat.move();
+
+function parse(data) {
+  if (typeof data === "string") {
+    return data.toLowerCase();
   }
 
-  // множення
-  let multiplyIndex = onlyOperators.indexOf('×');
-  while(multiplyIndex !== -1) {
-    const result = onlyNumbers[multiplyIndex] * onlyNumbers[multiplyIndex + 1];
+  return data.map((item) => {
+    return item.toLowerCase();
+  });
+}
 
-    onlyNumbers.splice(multiplyIndex, 2, result);
-    onlyOperators.splice(multiplyIndex, 1);
+parse("Some String");
+parse(["Some", "String"]);
 
-    multiplyIndex = onlyOperators.indexOf('×');
-  }
+class AuthAPI {
+  login() {}
 
-  // віднімання
-  let substractIndex = onlyOperators.indexOf('-');
-  while(substractIndex !== -1) {
-    const result = onlyNumbers[substractIndex] - onlyNumbers[substractIndex + 1];
+  register() {}
 
-    onlyNumbers.splice(substractIndex, 2, result);
-    onlyOperators.splice(substractIndex, 1);
+  logut() {}
+}
 
-    substractIndex = onlyOperators.indexOf('-');
-  }
+class UserAPI {
+  getMe() {}
 
-  // додавання
-  let sumIndex = onlyOperators.indexOf('+');
-  while(sumIndex !== -1) {
-    const result = parseFloat(onlyNumbers[sumIndex]) + parseFloat(onlyNumbers[sumIndex + 1]);
-
-    onlyNumbers.splice(sumIndex, 2, result);
-    onlyOperators.splice(sumIndex, 1);
-
-    sumIndex = onlyOperators.indexOf('+');
-  }
-
-  // замінюємо значення введеної операції на її результат
-  input.innerHTML = onlyNumbers[0];
-  // ставимо позначку що це вже результат введеної операції
-  isResultDisplyed = true;
-});
+  update() {}
+}
