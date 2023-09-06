@@ -1,64 +1,77 @@
 "use strict";
+// let loading = false;
 
-// function delay() {
-//   let sum = 0;
+// const promise = new Promise(function (resolve, reject) {
+//   loading = true;
+//   console.log("promise start...");
 
-//   for (let i = 0; i < 1000000000; i++) {
-//     sum += i;
+//   console.log("request to server...");
+//   const data = [1];
+
+//   if (data.length === 0) {
+//     return reject(new Error("something went wrong"));
 //   }
 
-//   console.log(sum);
-//   return sum;
-// }
+//   resolve(data);
+// });
 
-// setTimeout(delay, 5000);
-// console.log(1);
-// console.log(2);
+// promise
+//   .then((res) => res.json())
+//   .then((json) => fetch(json.userUrl))
+//   .catch((err) => console.log(err))
+//   .then((res) => res)
+//   .catch((err) => console.log(err))
+//   .finally(() => {
+//     loading = false;
+//   });
 
-// function outer() {
-//   function inner() {
-//     console.log("inner");
-//   }
-//   inner();
-// }
+// console.log(promise);
 
-// outer();
-
-// пустий
-// outer
-// outer, inner
-// outer, inner, console.log
-// outer, inner
-// outer
-// пустий
-
-// const button = document.querySelector("button");
-// button.addEventListener("click", () => console.log("click"));
-// https://jsonplaceholder.typicode.com/
-
-const user = {
-  name: "mykola",
-  email: "hubytskyi@gmail.com",
-  password: "1234",
-};
-
-const serverApiUrl = "http://servername.com";
-
-async function register() {
-  const userRes = await fetch("https://jsonplaceholder.typicode.com/users/2");
-  const parsedUserRes = await userRes.json();
-  const userTodos = await fetch(
-    `https://jsonplaceholder.typicode.com/todos?userId=${parsedUserRes.id}`
-  );
-  const parsedUserTodos = await userTodos.json();
-}
-
-// function register() {
-//   fetch("https://jsonplaceholder.typicode.com/todos/1")
-//     .then((response) => {
+// function fetchMovies() {
+//   fetch(`https://www.anapioficeandfire.com/api/houses?region=dorne`)
+//     .then(function (response) {
+//       console.log("response --> ", response);
 //       return response.json();
 //     })
-//     .then((json) => console.log(json));
+//     .then(function (houses) {
+//       console.log("houses --> ", houses);
+//       return fetch(houses[1].overlord);
+//     })
+//     .then(function (response) {
+//       return response.json();
+//     })
+//     .then(function (overlord) {
+//       console.log(overlord.name);
+//     })
+//     .catch(function (error) {
+//       console.log(`Щось пішло не так: ${error.message}`);
+//     });
 // }
 
-register();
+// fetchMovies();
+
+function fetchUsers() {
+  return new Promise(function (resolve, reject) {
+    fetch(
+      `https://jsonplaceholder.typicode.com/userds?token=${process.env.SECRET_KEY}`
+    ).then((res) => {
+      console.log(res);
+      if (res.ok) {
+        return resolve(res.json());
+      }
+
+      reject(res);
+    });
+    // console.log(res);
+  });
+}
+
+function renderUsers(users) {
+  const list = document.querySelector(".ul");
+  // list
+  // users
+}
+
+fetchUsers()
+  .then((users) => renderUsers(users))
+  .catch((err) => console.error(err.message));
