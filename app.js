@@ -69,7 +69,7 @@
 // console.log(null.length); // TypeError: Cannot read properties of null
 
 async function getUsers() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/ussers");
+  const response = await fetch("https://jsonplaceholder.typicode.com/users");
 
   if (response.ok) {
     return response.json();
