@@ -1,77 +1,97 @@
 "use strict";
-// let loading = false;
 
-// const promise = new Promise(function (resolve, reject) {
-//   loading = true;
-//   console.log("promise start...");
+// async function getStarWarsMovie(id) {
+//   console.log("start fetching...");
+//   const response = await fetch(`https://swapi.dev/api/films/${id}/`);
+//   console.log("отримали відповідь від ендпоїнту - ", response);
+//   return response.json();
+// }
 
-//   console.log("request to server...");
-//   const data = [1];
-
-//   if (data.length === 0) {
-//     return reject(new Error("something went wrong"));
-//   }
-
-//   resolve(data);
+// const movies = getStarWarsMovie(1).then((movie) => {
+//   console.log(movie);
 // });
 
-// promise
-//   .then((res) => res.json())
-//   .then((json) => fetch(json.userUrl))
-//   .catch((err) => console.log(err))
-//   .then((res) => res)
-//   .catch((err) => console.log(err))
-//   .finally(() => {
-//     loading = false;
-//   });
+// console.log("результат - ", movies);
 
-// console.log(promise);
-
-// function fetchMovies() {
-//   fetch(`https://www.anapioficeandfire.com/api/houses?region=dorne`)
-//     .then(function (response) {
-//       console.log("response --> ", response);
-//       return response.json();
+// function getMainActorProfileFromMovie(id) {
+//   return fetch(`https://swapi.dev/api/films/${id}/`)
+//     .then((movieResponse) => {
+//       return movieResponse.json();
 //     })
-//     .then(function (houses) {
-//       console.log("houses --> ", houses);
-//       return fetch(houses[1].overlord);
+//     .then((movie) => {
+//       const characterUrl = movie.characters[0].split("//")[1];
+//       return fetch(`https://${characterUrl}`);
 //     })
-//     .then(function (response) {
-//       return response.json();
+//     .then((characterResponse) => {
+//       return characterResponse.json();
 //     })
-//     .then(function (overlord) {
-//       console.log(overlord.name);
-//     })
-//     .catch(function (error) {
-//       console.log(`Щось пішло не так: ${error.message}`);
+//     .catch((err) => {
+//       console.error("Помилка - ", err);
 //     });
 // }
 
-// fetchMovies();
+// getMainActorProfileFromMovie(1).then((profile) => {
+//   console.log(profile);
+// });
 
-function fetchUsers() {
-  return new Promise(function (resolve, reject) {
-    fetch(
-      `https://jsonplaceholder.typicode.com/userds?token=${process.env.SECRET_KEY}`
-    ).then((res) => {
-      console.log(res);
-      if (res.ok) {
-        return resolve(res.json());
-      }
+// async function getMainActorProfileFromMovie(id) {
+//   try {
+//     const movieResponse = await fetch(`https://swapi.dev/api/films/${id}/`);
+//     const movie = await movieResponse.json();
 
-      reject(res);
-    });
-    // console.log(res);
-  });
+//     const characterUrl = movie.characters[0].split("//")[1];
+//     const characterResponse = await fetch(`https://${characterUrl}`);
+//     return characterResponse.json();
+//   } catch (err) {
+//     console.error("Помилка - ", err);
+//   } finally {
+//     console.log("done!");
+//   }
+// }
+
+// getMainActorProfileFromMovie(1).then((profile) => {
+//   console.log(profile);
+// });
+
+// async function getMainActorProfileFromMovie(id) {
+//   return 1;
+// }
+
+// await getMainActorProfileFromMovie(1);
+
+// const error = new Error("Movie not found");
+// console.log(error.name);
+
+// console.log(;) // SyntaxError: Unexpected token ';'
+
+// console.log(result); // ReferenceError: result is not defined
+
+// console.log(null.length); // TypeError: Cannot read properties of null
+
+async function getUsers() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/ussers");
+
+  if (response.ok) {
+    return response.json();
+  }
+
+  return [];
+}
+
+async function showUsers() {
+  const users = await getUsers();
+  renderUsers(users);
 }
 
 function renderUsers(users) {
-  const list = document.querySelector(".ul");
-  // list
-  // users
+  const list = document.querySelector("ul");
+
+  users.forEach((user) => {
+    const li = document.createElement("li");
+    li.innerHTML = user.name;
+
+    list.append(li);
+  });
 }
 
-fetchUsers()
-  .then((users) => renderUsers(users))
-  .catch((err) => console.error(err.message));
+showUsers();
