@@ -1,3 +1,3 @@
 # PROJECTOR | JAVASCRIPT - 7
 
-## Асинхронне програмування - 3
+## Workshop - Weather App
