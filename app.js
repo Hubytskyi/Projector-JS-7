@@ -1,72 +1,105 @@
 "use strict";
 
-const form = document.querySelector("form");
-const input = document.querySelector("input");
-const cities = document.querySelector(".cities");
-const errMsg = document.querySelector(".msg");
+// Github
+// UI
 
-const apiKey = "1149bcae540222f9853352ccae3a8df6";
-const apiKey2 = process.env.WEATHER_API_KEY;
-const findedCities = [];
+const GITHUB_API = "https://api.github.com";
 
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
+const searchInput = document.querySelector(".searchUser");
 
-  if (input.value.trim() === "") {
-    input.focus();
-    return null;
+class Github {
+  constructor() {
+    this.clientId = "d9308aacf8b204d361fd";
+    this.clientSecret = "84969aeef73956f4ec9e8716d1840532802bb81b";
   }
 
-  if (findedCities.includes(input.value.toLowerCase())) {
-    errMsg.innerHTML = `You already know the weather for ${input.value}`;
-    form.reset();
-    return;
+  async getUser(userName) {
+    const response = await fetch(
+      `${GITHUB_API}/users/${userName}?client_id=${this.clientId}&client_secret=${this.clientSecret}`
+    );
+    const user = await response.json();
+
+    return user;
+  }
+}
+
+class UI {
+  constructor() {
+    this.profile = document.querySelector(".profile");
   }
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${input.value}&appid=${apiKey}&units=metric`;
+  showProfile(user) {
+    this.profile.innerHTML = `
+    <div class="card card-body mb-3">
+    <div class="row">
+      <div class="col-md-3">
+        <img class="img-fluid mb-2" src="${user.avatar_url}">
+        <a href="${user.html_url}" target="_blank" class="btn btn-primary btn-block mb-4">View Profile</a>
+      </div>
+      <div class="col-md-9">
+        <span class="badge badge-primary">Public Repos: ${user.public_repos}</span>
+        <span class="badge badge-secondary">Public Gists: ${user.public_gists}</span>
+        <span class="badge badge-success">Followers: ${user.followers}</span>
+        <span class="badge badge-info">Following: ${user.following}</span>
+        <br><br>
+        <ul class="list-group">
+          <li class="list-group-item">Company: ${user.company}</li>
+          <li class="list-group-item">Website/Blog: ${user.blog}</li>
+          <li class="list-group-item">Location: ${user.location}</li>
+          <li class="list-group-item">Member Since: ${user.created_at}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <h3 class="page-heading mb-3">Latest Repos</h3>
+  <div class="repos"></div>a
+    `;
+  }
 
-  fetch(url)
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      if (data.cod === 200) {
-        const { main, sys, weather, name } = data;
+  clearProfile() {
+    this.profile.innerHTML = "";
+  }
 
-        // const system = data.sys;
+  showAlert(message, className) {
+    this.clearAlert();
+    const div = document.createElement("div");
 
-        const icon = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/${weather[0]["icon"]}.svg`;
-        const li = document.createElement("li");
-        li.classList.add("city");
+    div.className = className;
+    div.innerHTML = message;
 
-        const markup = `
-          <h2 class="city-name">
-            <span>${name}</span>
-            <sup>${sys.country}</sup>
-          </h2>
-          <div class="city-temp">${Math.round(main.temp)}</div>
-          <figure>
-            <img class="city-icon" src="${icon}" alt="${
-          weather[0]["description"]
-        }"/>
-            <figcaption>${weather[0]["description"]}</figcaption>
-          </figure>
-        `;
+    const search = document.querySelector(".search");
 
-        li.innerHTML = markup;
-        cities.appendChild(li);
-        findedCities.push(input.value.toLowerCase());
-        errMsg.innerHTML = "";
-      } else {
-        throw new Error(data.message);
-      }
-    })
-    // Error(data.message)
-    .catch((err) => {
-      errMsg.innerHTML = err.message;
-    })
-    .finally(() => {
-      form.reset();
-      input.focus();
-    });
+    search.before(div);
+
+    setTimeout(() => {
+      this.clearAlert();
+    }, 3000);
+  }
+
+  clearAlert() {
+    const alert = document.querySelector(".alert");
+    if (alert) {
+      alert.remove();
+    }
+  }
+}
+
+const github = new Github();
+const ui = new UI();
+
+searchInput.addEventListener("input", async (e) => {
+  const inputValue = e.target.value;
+
+  if (inputValue !== "") {
+    const userData = await github.getUser(inputValue);
+
+    if (userData.message === "Not Found") {
+      ui.clearProfile();
+      return ui.showAlert(userData.message, "alert alert-danger");
+    }
+
+    return ui.showProfile(userData);
+  }
+
+  ui.clearProfile();
 });
